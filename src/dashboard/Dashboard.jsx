@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -12,82 +13,45 @@ const Dashboard = () => {
   const [title, setTitle] = useState('');
   const [messages, setMessages] = useState([]);
   const [travelTips, setTravelTips] = useState([]);
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  
   const openWeatherApiKey = '11e01a344b24c6fbc1c19d945ae95a9a'; // OpenWeather API key
-  const geminiApiKey = 'AIzaSyBD5MlVkd78waOrDFMNyjnZ3l9pcFOvfXY'; // Your Gemini API key
+  const geminiApiKey = 'AIzaSyBD5MlVkd78waOrDFMNyjnZ3l9pcFOvfXY'; // Gemini API key
 
-  // Fetch travel tips from TripAdvisor API when the component mounts
   // Fetch travel tips when the component mounts
-useEffect(() => {
-  const fetchTravelTips = async () => {
-    try {
-      // Fetching travel tips
-      const response = await axios.get('https://api.example.com/travel-tips', {
-        headers: {
-          'Authorization': `Bearer YOUR_API_KEY`, // Add your API key here
-          'Content-Type': 'application/json',
-        },
-      });
-      setTravelTips(response.data);
-      
-      // Fetching restaurant data
-      const restaurantResponse = await axios.get('https://tripadvisor16.p.rapidapi.com/api/v1/restaurant/searchRestaurants?locationId=304554', {
-        headers: {
-          'x-rapidapi-key': '59283900cfmsh6790247db9f1361p14f2f6jsn9cd2ee9fb1a0',
-          'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com',
-        },
-      });
-      // Process restaurant data as needed
-      console.log(restaurantResponse.data);
-      
-    } catch (error) {
-      if (error.response) {
-        // Handle specific error responses
-        console.error("Error fetching travel tips:", error.response.status, error.response.data);
-      } else {
-        console.error("Error fetching travel tips:", error.message);
-      }
-
-      // Fallback data for testing
-      setTravelTips([
-        "Tip 1: Always check your passport's expiration date.",
-        "Tip 2: Learn a few basic phrases in the local language.",
-        "Tip 3: Pack a universal power adapter for your electronics.",
-      ]);
-    }
-  };
-
-  fetchTravelTips();
-}, []);
-
+  useEffect(() => {
+    setTravelTips([
+      "Tip 1: Always check your passport's expiration date.",
+      "Tip 2: Learn a few basic phrases in the local language.",
+      "Tip 3: Pack a universal power adapter for your electronics.",
+    ]);
+  }, []);
 
   // Handle Gemini API response
   const handleGeminiResponse = async (query) => {
     try {
-      const response = await axios.post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent', {
-        query: query,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${geminiApiKey}`, // Use the correct token type if required
-          'Content-Type': 'application/json',
+      const response = await axios({
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`,
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: query }] }],
         },
       });
-      return response.data; // Return the response data based on your API response structure
+      return response.data.candidates[0].content.parts[0].text; // Adjust according to API response structure
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.error("Unauthorized access: Please check your API key.");
-      } else {
-        console.error("Error fetching Gemini response:", error);
-      }
-      throw new Error("Failed to fetch Gemini response");
+      console.error("Error fetching Gemini API response:", error);
+      return "❌ Sorry, there was an error with your request. Please try again.";
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (title) {
       const userMessage = { text: title, sender: 'user' };
       setMessages((prev) => [...prev, userMessage]);
       setTitle('');
+      setGeneratingAnswer(true);
 
       if (title.toLowerCase().includes('weather')) {
         const city = title.split(' ').pop();
@@ -113,12 +77,11 @@ useEffect(() => {
         try {
           const geminiResponse = await handleGeminiResponse(title);
           const botMessage = {
-            text: `🤖 ${geminiResponse}`, // Update as needed based on Gemini API response format
+            text: `🤖 AI says: ${geminiResponse}`,
             sender: 'bot',
           };
           setMessages((prev) => [...prev, botMessage]);
         } catch (error) {
-          console.error("Error handling Gemini response:", error);
           const botMessage = {
             text: "❌ Sorry, there was an error with your request. Please try again.",
             sender: 'bot',
@@ -126,6 +89,8 @@ useEffect(() => {
           setMessages((prev) => [...prev, botMessage]);
         }
       }
+
+      setGeneratingAnswer(false);
     }
   };
 
@@ -149,20 +114,28 @@ useEffect(() => {
             <div className="messages">
               {messages.map((msg, index) => (
                 <div key={index} className={`message ${msg.sender}`}>
-                  {msg.text}
+                  <ReactMarkdown>{msg.text}</ReactMarkdown>
                 </div>
               ))}
             </div>
 
             <form onSubmit={handleSubmit} className="message-input">
-              <input
-                type="text"
-                placeholder="Type your message..."
+              <textarea
+                required
+                className="border border-gray-300 rounded w-full my-2 min-h-fit p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="input-text" // Add class for styling
-              />
-              <button type="submit">Send</button>
+                placeholder="Type your message..."
+              ></textarea>
+              <button
+                type="submit"
+                className={`bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300 ${
+                  generatingAnswer ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                disabled={generatingAnswer}
+              >
+                {generatingAnswer ? 'Generating...' : 'Send'}
+              </button>
             </form>
           </div>
 
@@ -170,7 +143,7 @@ useEffect(() => {
             <h3>Travel Tips:</h3>
             <ul>
               {travelTips.map((tip, index) => (
-                <li key={index} className="travel-tip">{tip}</li> // Add class for styling
+                <li key={index} className="travel-tip">{tip}</li>
               ))}
             </ul>
           </div>

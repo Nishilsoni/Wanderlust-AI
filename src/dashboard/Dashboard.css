@@ -117,6 +117,29 @@ body, html {
   box-shadow: 0 4px 15px rgba(224, 224, 224, 0.5); /* Shadow effect */
 }
 
+/* Input Textarea */
+textarea {
+  width: 100%;
+  min-height: 100px; /* Increased size for message input */
+  background-color: rgba(255, 255, 255, 0.3); /* Light input background with transparency */
+  color: #fff;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  resize: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+}
+
+textarea::placeholder {
+  color: #aaa; /* Placeholder color */
+}
+
+textarea:focus {
+  background-color: rgba(255, 255, 255, 0.4); /* Slightly darker on focus */
+  border-color: #1f5afb; /* Highlight border on focus */
+}
+
 /* Message Input */
 .message-input {
   display: flex;
