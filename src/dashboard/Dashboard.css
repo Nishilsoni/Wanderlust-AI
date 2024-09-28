@@ -1,133 +1,184 @@
-/* Success.css */
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Arial', sans-serif;
-    background-color: #0a0a0a; /* Dark background color */
-    color: #ffffff; /* Light text color */
+  height: 100%;
+  width: 100%;
+  font-family: 'Nunito', sans-serif; /* Rounded font */
+  background: linear-gradient(135deg, #1a1a52, #4b1a52); /* Dark blue to purple gradient */
+  color: #fff; /* White text for better contrast */
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #003366, #663399); /* Header gradient */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* Shadow for header */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  animation: fadeIn 1s ease; /* Fade-in animation */
+}
+
+/* Header name and email visibility */
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #fff; /* Make the text solid white for visibility */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add text shadow for better contrast */
+}
+
+/* Container Styles */
+.container {
+  display: flex;
+  height: calc(100% - 80px);
+  margin-top: 80px;
+  padding: 20px;
+  overflow-y: auto; /* Allow scrolling */
+}
+
+/* Chatbot Dashboard Styles */
+.chatbot-dashboard {
+  flex: 2; /* Take more space on the left */
+  max-width: 800px; /* Max width for desktop */
+  margin-right: 20px; /* Space between chatbot and tips */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white for blur effect */
+  backdrop-filter: blur(15px); /* Increased blur effect */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); /* Shadow effect */
+  padding: 20px;
+  height: 100%; /* Ensure it fills the available height */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
+}
+
+/* Tips Container Styles */
+.tips-container {
+  flex: 1; /* Take less space on the right */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white for blur effect */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  padding: 20px;
+  overflow-y: auto; /* Allow scrolling if tips exceed the height */
+}
+
+/* Chat Header */
+.chat-header {
+  font-size: 24px;
+  background: linear-gradient(135deg, #1e99b2, #1f5afb, #8c00ff); /* Rich gradient for header */
+  background-clip: text; /* Gradient text effect */
+  -webkit-background-clip: text; /* For Safari */
+  color: transparent; /* Transparent color to show gradient */
+  text-align: center;
+  margin-bottom: 20px; /* Space below header */
+}
+
+/* Messages */
+.messages {
+  max-height: 400px; /* Set max height */
+  overflow-y: auto; /* Scrollable messages */
+  margin-bottom: 20px;
+  padding: 10px; /* Add padding for better appearance */
+  border-radius: 8px; /* Rounded corners */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+}
+
+/* Message Styles */
+.message {
+  padding: 12px 15px; /* Increased padding for a more rounded look */
+  border-radius: 20px; /* Rounded corners for message bubbles */
+  margin: 5px 0;
+  max-width: 80%; /* Limit width */
+  position: relative;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Transition for background color and shadow */
+}
+
+/* User Message Style */
+.message.user {
+  background-color: rgba(0, 123, 255, 0.7); /* User message color with transparency */
+  color: white;
+  margin-left: auto; /* Align right */
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.5); /* Shadow effect */
+}
+
+/* Bot Message Style */
+.message.bot {
+  background-color: rgba(224, 224, 224, 0.8); /* Bot message color with transparency */
+  color: #333;
+  box-shadow: 0 4px 15px rgba(224, 224, 224, 0.5); /* Shadow effect */
+}
+
+/* Message Input */
+.message-input {
+  display: flex;
+}
+
+.input-text {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px;
+  margin-right: 10px;
+  background-color: rgba(255, 255, 255, 0.3); /* Light input background with transparency */
+  color: #333; /* Input text color */
+  transition: border-color 0.3s; /* Transition for border color */
+}
+
+.input-text::placeholder {
+  color: #aaa; /* Placeholder color */
+}
+
+.input-text:focus {
+  border-color: #007BFF; /* Change border color on focus */
+}
+
+.message-input button {
+  padding: 12px 20px;
+  border: none;
+  background-color: #007BFF; /* Button color */
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transition for hover effect */
+}
+
+.message-input button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  transform: scale(1.01); /* Slightly enlarge on hover */
+}
+
+/* Travel Tips Styles */
+.tips-container h3 {
+  margin-bottom: 10px; /* Space below the header */
+}
+
+.travel-tip {
+  margin: 5px 0; /* Space between tips */
+  padding: 10px;
+  border-radius: 8px; /* Rounded corners for tips */
+  background: rgba(255, 255, 255, 0.3); /* Semi-transparent background for tips */
+  transition: transform 0.3s; /* Transition for hover effect */
+}
+
+.travel-tip:hover {
+  transform: scale(1.02); /* Slightly enlarge on hover */
+}
+
+/* Fade-In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #1c1c1c; /* Header background color */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    position: fixed; /* Fix header at the top */
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000; /* Make sure header is above other content */
+  to {
+    opacity: 1;
   }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  .profile {
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile p {
-    margin-right: 20px;
-  }
-  
-  .profile button {
-    background-color: transparent;
-    color: #ffffff;
-    border: 1px solid #4a90e2; /* Light border for button */
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .profile button:hover {
-    background-color: #4a90e2; /* Light blue on hover */
-    color: #ffffff; /* Change text color on hover */
-  }
-  
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100% - 80px); /* Adjust height based on header height */
-    padding: 20px;
-    margin-top: 80px; /* Push down for fixed header */
-  }
-  
-  .chatbot-dashboard {
-    display: flex;
-    flex-direction: column;
-    width: 100%; /* Use full width */
-    max-width: 800px; /* Max width for the chatbot dashboard */
-    padding: 30px;
-    background-color: #1e1e1e; /* Chatbot dashboard background */
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .chatbot-dashboard h2 {
-    margin-top: 0;
-  }
-  
-  form {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  form input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #333; /* Dark border */
-    border-radius: 5px;
-    margin-right: 10px;
-    background-color: #2c2c2c; /* Input background */
-    color: #ffffff; /* Input text color */
-  }
-  
-  form input::placeholder {
-    color: #888; /* Placeholder color */
-  }
-  
-  form button {
-    padding: 12px 20px;
-    border: none;
-    background-color: #4a90e2; /* Button color */
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  form button:hover {
-    background-color: #357ab7; /* Darker shade on hover */
-  }
-  
-  .response-box {
-    background-color: #2c2c2c; /* Response box background */
-    padding: 15px;
-    border: 1px solid #444; /* Dark border */
-    border-radius: 5px;
-    margin-bottom: 20px;
-  }
-  
-  .history-section {
-    margin-top: 20px;
-  }
-  
-  .history-section ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .history-section li {
-    padding: 10px;
-    border-bottom: 1px solid #444; /* Dark border for list items */
-  }
-  
+}

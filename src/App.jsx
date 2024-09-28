@@ -3,7 +3,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import Success from './dashboard/Success';
+import dashboard from './dashboard/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -13,10 +13,10 @@ const App = () => {
       <Route path="/signup" element={<SignUp />} />
       {/* Protect the /success route */}
       <Route
-        path="/success"
+        path="/dashboard"
         element={
           <ProtectedRoute>
-            <Success />
+            <dashboard />
           </ProtectedRoute>
         }
       />

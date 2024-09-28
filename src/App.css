@@ -64,3 +64,17 @@
 .link:hover {
   text-decoration: underline;
 }
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins', sans-serif; /* Change to Poppins or your desired font */
+  background-color: #0a0a0a; /* Dark background color */
+  color: #ffffff; /* Light text color */
+}
