@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import './Success.css';
+import './Dashboard.css';
 
-const Success = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userEmail = location.state?.userEmail;
@@ -87,4 +87,4 @@ const Success = () => {
   );
 };
 
-export default Success;
+export default Dashboard;

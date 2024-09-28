@@ -23,7 +23,7 @@ const SignIn = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/success', { state: { userEmail: email } });
+      navigate('/dashboard', { state: { userEmail: email } });
     } catch (error) {
       setError(error.message);
     }
