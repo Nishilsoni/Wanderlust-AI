@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import './SignUp.css'; // Import the new CSS file
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -31,8 +32,7 @@ const SignUp = () => {
       <motion.h2 
         initial={{ y: -20 }} 
         animate={{ y: 0 }} 
-        transition={{ duration: 0.3 }}
-      >
+        transition={{ duration: 0.3 }}>
         Sign Up
       </motion.h2>
       <form onSubmit={handleSignUp}>
@@ -59,16 +59,14 @@ const SignUp = () => {
         <motion.button
           type="submit"
           whileHover={{ scale: 1.1 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
+          transition={{ type: "spring", stiffness: 300 }}>
           Sign Up
         </motion.button>
         {error && (
           <motion.p className="error-message" 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
-            transition={{ duration: 0.5 }}
-          >
+            transition={{ duration: 0.5 }}>
             {error}
           </motion.p>
         )}

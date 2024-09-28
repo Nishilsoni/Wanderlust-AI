@@ -1,0 +1,133 @@
+/* Success.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #0a0a0a; /* Dark background color */
+    color: #ffffff; /* Light text color */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1c1c1c; /* Header background color */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: fixed; /* Fix header at the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Make sure header is above other content */
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile p {
+    margin-right: 20px;
+  }
+  
+  .profile button {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #4a90e2; /* Light border for button */
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profile button:hover {
+    background-color: #4a90e2; /* Light blue on hover */
+    color: #ffffff; /* Change text color on hover */
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 80px); /* Adjust height based on header height */
+    padding: 20px;
+    margin-top: 80px; /* Push down for fixed header */
+  }
+  
+  .chatbot-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Use full width */
+    max-width: 800px; /* Max width for the chatbot dashboard */
+    padding: 30px;
+    background-color: #1e1e1e; /* Chatbot dashboard background */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .chatbot-dashboard h2 {
+    margin-top: 0;
+  }
+  
+  form {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  form input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #333; /* Dark border */
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #2c2c2c; /* Input background */
+    color: #ffffff; /* Input text color */
+  }
+  
+  form input::placeholder {
+    color: #888; /* Placeholder color */
+  }
+  
+  form button {
+    padding: 12px 20px;
+    border: none;
+    background-color: #4a90e2; /* Button color */
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #357ab7; /* Darker shade on hover */
+  }
+  
+  .response-box {
+    background-color: #2c2c2c; /* Response box background */
+    padding: 15px;
+    border: 1px solid #444; /* Dark border */
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .history-section {
+    margin-top: 20px;
+  }
+  
+  .history-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .history-section li {
+    padding: 10px;
+    border-bottom: 1px solid #444; /* Dark border for list items */
+  }
+  

@@ -118,3 +118,20 @@ button:hover {
     padding: 20px; /* Adjust padding for smaller screens */
   }
 }
+.reset-password {
+  margin-top: 20px;
+}
+
+.reset-password input {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
