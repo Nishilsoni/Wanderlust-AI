@@ -1,5 +1,4 @@
-// src/components/SignIn.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +14,15 @@ const SignIn = () => {
   const [resetError, setResetError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    if (savedEmail) setEmail(savedEmail);
+    if (savedPassword) setPassword(savedPassword);
+  }, []);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -23,6 +30,13 @@ const SignIn = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberedPassword', password);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberedPassword');
+      }
       navigate('/dashboard', { state: { userEmail: email } });
     } catch (error) {
       setError(error.message);
@@ -44,14 +58,13 @@ const SignIn = () => {
   };
 
   return (
-    <motion.div className={`container ${showResetForm ? 'blur' : ''}`}
+    <motion.div
+      className={`container ${showResetForm ? 'blur' : ''}`}
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}>
-      <motion.h2 
-        initial={{ y: -20 }} 
-        animate={{ y: 0 }} 
-        transition={{ duration: 0.3 }}>
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h2 initial={{ y: -20 }} animate={{ y: 0 }} transition={{ duration: 0.3 }}>
         Sign In
       </motion.h2>
       <form onSubmit={handleSignIn}>
@@ -61,8 +74,8 @@ const SignIn = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          whileHover={{ scale: 1.05 }} 
-          whileFocus={{ scale: 1.05 }} 
+          whileHover={{ scale: 1.05 }}
+          whileFocus={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         />
         <motion.input
@@ -71,21 +84,37 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          whileHover={{ scale: 1.05 }} 
-          whileFocus={{ scale: 1.05 }} 
+          whileHover={{ scale: 1.05 }}
+          whileFocus={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         />
+        
+        <label className="remember-me-label">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="remember-me-checkbox"
+          />
+          
+          <span className="custom-checkbox"></span>
+          Remember Me
+        </label>
+
         <motion.button
           type="submit"
-          whileHover={{ scale: 1.1 }} 
-          transition={{ type: "spring", stiffness: 300 }}>
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           Sign In
         </motion.button>
         {error && (
-          <motion.p className="error-message" 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ duration: 0.5 }}>
+          <motion.p
+            className="error-message"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             {error}
           </motion.p>
         )}
@@ -97,15 +126,16 @@ const SignIn = () => {
         </motion.button>
       </p>
       <p>
-        <motion.button 
-          onClick={() => setShowResetForm(true)} 
-          className="link" 
-          whileHover={{ scale: 1.05 }}>
+        <motion.button
+          onClick={() => setShowResetForm(true)}
+          className="link"
+          whileHover={{ scale: 1.05 }}
+        >
           Forgot Password?
         </motion.button>
       </p>
 
-      <Modal 
+      <Modal
         isOpen={showResetForm}
         onClose={() => setShowResetForm(false)}
         onSubmit={handleResetPassword}

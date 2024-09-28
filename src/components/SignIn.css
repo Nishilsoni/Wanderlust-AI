@@ -83,4 +83,74 @@ body, html {
     border-radius: 5px;
     background-color: #1e1e1e; /* Background for reset form */
   }
-  
+
+  label {
+    color: #ffffff; /* Label color */
+    cursor: pointer; /* Change cursor to pointer for label */
+}
+
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #ffffff; /* Label color */
+  cursor: pointer; /* Change cursor to pointer for label */
+}
+
+.remember-me-checkbox {
+  display: none; /* Hide the default checkbox */
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4a90e2; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+  position: relative;
+  margin-right: 10px;
+  background-color: transparent; /* Default background */
+  transition: background-color 0.3s ease; /* Transition for background */
+}
+
+.custom-checkbox::after {
+  content: '';
+  position: absolute;
+  width: 2px; /* Width of the tick */
+  height: 10px; /* Height of the tick */
+  border: solid #ffffff; /* Color of the tick */
+  border-width: 0 2px 2px 0; /* Only show the right and bottom borders */
+  left: 8px; /* Position of the tick */
+  top: 2px; /* Position of the tick */
+  transform: rotate(45deg); /* Rotate to form a tick */
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+.remember-me-checkbox:checked + .custom-checkbox {
+  background-color: #4a90e2; /* Fill color when checked */
+}
+
+.remember-me-checkbox:checked + .custom-checkbox::after {
+  opacity: 1; /* Show tick when checked */
+}
+
+button {
+  padding: 12px;
+  border: none;
+  background-color: #4a90e2; /* Button color */
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #357ab7; /* Darker shade on hover */
+}
+.custom-checkbox {
+  cursor: pointer; /* Ensure the custom checkbox shows pointer cursor */
+}
+
+.remember-me-label {
+  cursor: pointer; /* Ensure label shows pointer cursor */
+}
