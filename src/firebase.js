@@ -1,4 +1,4 @@
-// Import the functions you need from the SDKs you need
+// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth"; // Import getAuth for authentication
 import { getAnalytics } from "firebase/analytics";
