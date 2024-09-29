@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import './Dashboard.css';
+import Sidebar from './Sidebar'; // Import Sidebar component
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,22 +12,21 @@ const Dashboard = () => {
 
   const [title, setTitle] = useState('');
   const [messages, setMessages] = useState([]);
-  const [travelTips, setTravelTips] = useState([]);
   const [generatingAnswer, setGeneratingAnswer] = useState(false);
-  
+  const messagesEndRef = useRef(null); // Ref for scrolling
+
   const openWeatherApiKey = '11e01a344b24c6fbc1c19d945ae95a9a'; // OpenWeather API key
   const geminiApiKey = 'AIzaSyBD5MlVkd78waOrDFMNyjnZ3l9pcFOvfXY'; // Gemini API key
+  const aviationstackKey = '1029b54b951b96e5ce8297e545186674';
 
-  // Fetch travel tips when the component mounts
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
-    setTravelTips([
-      "Tip 1: Always check your passport's expiration date.",
-      "Tip 2: Learn a few basic phrases in the local language.",
-      "Tip 3: Pack a universal power adapter for your electronics.",
-    ]);
-  }, []);
+    scrollToBottom();
+  }, [messages]);
 
-  // Handle Gemini API response
   const handleGeminiResponse = async (query) => {
     try {
       const response = await axios({
@@ -44,7 +43,30 @@ const Dashboard = () => {
     }
   };
 
-  // Handle form submission
+  const handleFlightQuery = async (flightNumber) => {
+    try {
+      const response = await axios.get(`http://api.aviationstack.com/v1/flights`, {
+        params: {
+          access_key: aviationstackKey,
+          flight_iata: flightNumber,
+        }
+      });
+      const flightData = response.data.data[0];
+      const botMessage = {
+        text: `✈️ Flight ${flightData.flight.iata} from ${flightData.departure.airport} to ${flightData.arrival.airport} is currently ${flightData.flight_status}.`,
+        sender: 'bot',
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      console.error("Error fetching flight data:", error);
+      const errorMessage = {
+        text: "❌ Sorry, I couldn't fetch flight details. Please try again.",
+        sender: 'bot',
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (title) {
@@ -94,59 +116,88 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    navigate('/'); 
+  };
+
+  const handleRedirect = () => {
+    window.open('https://forms.gle/cSRpjRn7k8B3bJNG8', '_blank'); // Replace with your desired link
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) {
+        return;
+      } else {
+        e.preventDefault();
+        handleSubmit(e);
+      }
+    }
+  };
+
   return (
     <>
-      <header className="header">
-        <h1>Wanderlust AI</h1>
-        <div className="profile">
-          <p>{userEmail}</p>
-          <button onClick={() => navigate('/')}>Logout</button>
+      <header className="flex justify-between items-center p-4 bg-gray-800 shadow-lg">
+        <h1 className="text-2xl text-white">Wanderlust AI</h1>
+        <div className="flex items-center">
+          <p className="text-gray-300 mr-4">{userEmail}</p>
+          <button 
+            onClick={handleLogout} 
+            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-300"
+          >
+            Logout
+          </button>
         </div>
       </header>
-      <motion.div className="container"
+      <motion.div 
+        className="flex h-[calc(100vh-80px)] mt-5 p-5 overflow-hidden bg-gray-100"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}>
-        
-        <div className="chatbot-dashboard">
-          <div className="chatbot-container">
-            <h2 className="chat-header">Chatbot</h2>
-            <div className="messages">
-              {messages.map((msg, index) => (
-                <div key={index} className={`message ${msg.sender}`}>
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                </div>
-              ))}
-            </div>
-
-            <form onSubmit={handleSubmit} className="message-input">
-              <textarea
-                required
-                className="border border-gray-300 rounded w-full my-2 min-h-fit p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Type your message..."
-              ></textarea>
-              <button
-                type="submit"
-                className={`bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300 ${
-                  generatingAnswer ? 'opacity-50 cursor-not-allowed' : ''
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex-1 max-w-3xl mx-auto bg-white bg-opacity-90 rounded-lg shadow-lg p-5 flex flex-col">
+          <h2 className="text-2xl text-center text-gray-800 mb-5">Chatbot</h2>
+          <div className="flex-1 max-h-[60vh] overflow-y-auto mb-5 p-2 rounded-lg bg-gray-200 shadow-lg">
+            {messages.map((msg, index) => (
+              <motion.div
+                key={index}
+                className={`mb-2 p-3 rounded-lg transition-transform duration-300 ${
+                  msg.sender === 'user' ? 'bg-blue-600 text-white self-end' : 'bg-gray-300 text-gray-800'
                 }`}
-                disabled={generatingAnswer}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
               >
-                {generatingAnswer ? 'Generating...' : 'Send'}
-              </button>
-            </form>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </motion.div>
+            ))}
+            <div ref={messagesEndRef} /> {/* Scroll target */}
           </div>
-
-          <div className="tips-container">
-            <h3>Travel Tips:</h3>
-            <ul>
-              {travelTips.map((tip, index) => (
-                <li key={index} className="travel-tip">{tip}</li>
-              ))}
-            </ul>
-          </div>
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <textarea
+              required
+              className="w-full min-h-[50px] bg-gray-200 border border-gray-400 rounded-lg p-3 mb-3 resize-none transition-all duration-300 focus:bg-gray-300 focus:border-blue-500"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your message..."
+            ></textarea>
+            <button 
+              type="submit" 
+              className={`bg-blue-600 text-white rounded-md p-3 hover:bg-blue-700 transition-all duration-300 ${
+                generatingAnswer ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={generatingAnswer}
+            >
+              {generatingAnswer ? 'Generating...' : 'Send'}
+            </button>
+            <button
+              type="button"
+              onClick={handleRedirect}
+              className="mt-3 bg-green-600 text-white rounded-md p-3 hover:bg-green-700 transition-all duration-300"
+            >
+              Feedback Form
+            </button>
+          </form>
         </div>
       </motion.div>
     </>

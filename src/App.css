@@ -60,6 +60,14 @@
   text-decoration: none;
   font-weight: bold;
 }
+.glow-effect {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow-effect:hover,
+.glow-effect:focus {
+  box-shadow: 0 0 20px rgba(63, 191, 255, 0.7), 0 0 30px rgba(63, 191, 255, 0.5);
+}
 
 .link:hover {
   text-decoration: underline;
