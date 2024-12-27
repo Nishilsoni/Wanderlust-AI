@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth } from '../firebase/firebase.js'; // Ensure the path to your Firebase setup is correct
+import { auth } from '../Firebase/firebase.js'; // Ensure the path to your Firebase setup is correct
 import { signOut } from 'firebase/auth'; 
 import { useNavigate } from 'react-router-dom';
 
