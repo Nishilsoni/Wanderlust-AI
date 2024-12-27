@@ -3,8 +3,6 @@ export default {
     tailwindcss: {},
     autoprefixer: {},
   },
-}
-module.exports = {
   theme: {
     extend: {
       boxShadow: {
